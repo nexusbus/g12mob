@@ -3,7 +3,7 @@
 
 @theme {
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  
+
   --color-primary: #da0b2e;
   --color-primary-hover: #b80926;
   --color-bg-dark: #0f0506;
@@ -13,15 +13,25 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 15px;
+  /* Redução global leve para um aspeto mais "chic" */
 }
 
 @layer base {
   body {
     @apply bg-[#fcfafb] text-slate-900 antialiased selection:bg-primary selection:text-white;
   }
-  
+
   .dark body {
     @apply bg-bg-dark text-slate-100;
+  }
+
+  /* UX Fluido: Transições suaves globais para elementos interativos */
+  button,
+  a,
+  input,
+  .group {
+    @apply transition-all duration-300 ease-in-out;
   }
 }
 
@@ -29,22 +39,23 @@ html {
   .glass-card {
     @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl;
   }
-  
+
   .dark .glass-card {
     @apply bg-surface-dark/60 backdrop-blur-xl border border-border-dark shadow-2xl;
   }
-  
+
   .btn-primary {
-    @apply bg-primary text-white px-6 py-3.5 rounded-2xl font-extrabold transition-all hover:bg-primary-hover hover:shadow-lg hover:shadow-primary/20 active:scale-95;
+    @apply bg-primary text-white px-6 py-3 rounded-2xl font-bold transition-all hover:bg-primary-hover hover:shadow-lg hover:shadow-primary/20 active:scale-95;
   }
-  
+
   .input-field {
     @apply w-full bg-slate-100/50 dark:bg-surface-dark/50 border border-transparent rounded-2xl px-5 py-4 focus:ring-2 focus:ring-primary/30 transition-all outline-none;
   }
 }
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -52,5 +63,5 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary/10 rounded-full hover:bg-primary/30 transition-colors;
+  @apply bg-primary/10 rounded-full hover:bg-primary/20;
 }
