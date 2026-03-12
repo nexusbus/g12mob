@@ -45,8 +45,8 @@ const Navbar = ({ onNavigate, currentScreen }: { onNavigate: (s: Screen) => void
   <nav className="sticky top-0 z-50 bg-white/70 dark:bg-bg-dark/70 backdrop-blur-xl border-b border-primary/10">
     <div className="max-w-[1600px] mx-auto flex items-center justify-between p-4 md:px-8">
       <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
-        <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20 transition-transform group-hover:scale-110">
-          <HomeIcon className="text-white size-5" />
+        <div className="bg-white p-1 rounded-xl shadow-lg border border-primary/10 transition-transform group-hover:scale-110">
+          <img src="/logo.png" alt="G12 Logo" className="size-8 object-contain" />
         </div>
         <h2 className="text-xl md:text-2xl font-black tracking-tighter uppercase dark:text-white">
           G12 <span className="text-primary font-light">Imobiliária</span>
