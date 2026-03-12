@@ -49,7 +49,7 @@ const Navbar = ({ onNavigate, currentScreen }: { onNavigate: (s: Screen) => void
           <img src="/logo.png" alt="G12 Logo" className="size-8 object-contain" />
         </div>
         <h2 className="text-xl md:text-2xl font-black tracking-tighter uppercase dark:text-white">
-          G12 <span className="text-primary font-light">Imobiliária</span>
+          G12<span className="text-primary font-light">IMOBILIARIA</span>
         </h2>
       </div>
       <div className="flex items-center gap-2 md:gap-4">
