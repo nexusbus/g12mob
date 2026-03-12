@@ -179,7 +179,7 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-5xl md:text-7xl font-black leading-tight text-white"
+          className="text-4xl md:text-6xl font-black leading-tight text-white tracking-tighter"
         >
           Soluções Imobiliárias <br />sob medida para o <span className="text-primary">seu futuro</span>
         </motion.h1>
@@ -228,7 +228,7 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
           transition={{ delay: i * 0.1 }}
           className="text-center space-y-1"
         >
-          <p className="text-4xl font-black text-primary">{stat.value}</p>
+          <p className="text-3xl font-black text-primary">{stat.value}</p>
           <p className="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-widest">{stat.label}</p>
         </motion.div>
       ))}
@@ -238,7 +238,7 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
     <section className="px-6 py-12 max-w-[1600px] mx-auto">
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-4">
         <div className="space-y-3">
-          <h2 className="text-4xl md:text-5xl font-black dark:text-white tracking-tighter">Imóveis em Destaque</h2>
+          <h2 className="text-3xl md:text-4xl font-black dark:text-white tracking-tighter">Imóveis em Destaque</h2>
           <div className="h-2 w-32 bg-primary rounded-full"></div>
         </div>
         <button className="text-primary font-black flex items-center gap-2 hover:gap-4 transition-all group text-lg">
@@ -256,8 +256,8 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
     <section className="bg-primary/5 dark:bg-primary/5 py-24 my-12">
       <div className="px-6 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
-          <h2 className="text-4xl font-black dark:text-white">Por que escolher a G12?</h2>
-          <p className="text-slate-500 dark:text-slate-400 text-lg">Oferecemos uma experiência personalizada e segura em cada passo do seu investimento.</p>
+          <h2 className="text-3xl font-black dark:text-white">Por que escolher a G12?</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-base">Oferecemos uma experiência personalizada e segura em cada passo do seu investimento.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
@@ -269,7 +269,7 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
               <div className="w-20 h-20 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto transition-transform group-hover:rotate-12 group-hover:scale-110">
                 <item.icon className="size-10" />
               </div>
-              <h3 className="text-2xl font-bold dark:text-white">{item.title}</h3>
+              <h3 className="text-xl font-bold dark:text-white">{item.title}</h3>
               <p className="text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
             </div>
           ))}
@@ -281,11 +281,11 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
     <section className="px-6 py-12">
       <div className="max-w-6xl mx-auto bg-gradient-to-br from-primary to-primary-hover rounded-[40px] p-10 md:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-primary/30">
         <div className="relative z-10 space-y-8">
-          <h2 className="text-4xl md:text-6xl font-black">Pronto para encontrar <br />o seu lugar?</h2>
-          <p className="text-white/80 text-xl max-w-2xl mx-auto font-medium">Nossos consultores estão disponíveis para uma consultoria gratuita hoje mesmo.</p>
+          <h2 className="text-3xl md:text-5xl font-black">Pronto para encontrar <br />o seu lugar?</h2>
+          <p className="text-white/80 text-lg max-w-2xl mx-auto font-medium">Nossos consultores estão disponíveis para uma consultoria gratuita hoje mesmo.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <button className="bg-white text-primary px-10 py-5 rounded-2xl font-black text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl">Falar com Consultor</button>
-            <button className="bg-white/10 backdrop-blur-md border border-white/30 text-white px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95">Ver Catálogo 2024</button>
+            <button className="bg-white text-primary px-10 py-5 rounded-2xl font-black text-base hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl">Falar com Consultor</button>
+            <button className="bg-white/10 backdrop-blur-md border border-white/30 text-white px-10 py-5 rounded-2xl font-black text-base hover:bg-white/20 transition-all hover:scale-105 active:scale-95">Ver Catálogo 2026</button>
           </div>
         </div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
@@ -339,7 +339,7 @@ const DetailsScreen = ({ property, onBack }: { property: Property, onBack: () =>
               {property.status}
             </span>
           </div>
-          <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] uppercase">
+          <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] uppercase">
             {property.title}
           </h1>
           <div className="flex items-center gap-4 text-white/80 text-lg font-medium">

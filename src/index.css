@@ -11,6 +11,10 @@
   --color-border-dark: #2d1417;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   body {
     @apply bg-[#fcfafb] text-slate-900 antialiased selection:bg-primary selection:text-white;
