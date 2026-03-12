@@ -1,0 +1,7 @@
+{
+  "name": "G12 Imobiliária",
+  "description": "Plataforma imobiliária de luxo em Angola com gestão completa de imóveis e leads.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
