@@ -437,7 +437,237 @@ const ICON_MAP: Record<string, any> = {
   compass: Compass
 };
 
+const PropertyModal = ({ 
+  isOpen, 
+  onClose, 
+  onSave, 
+  property 
+}: { 
+  isOpen: boolean, 
+  onClose: () => void, 
+  onSave: (p: Partial<Property>) => void, 
+  property?: Property | null 
+}) => {
+  const [formData, setFormData] = useState<Partial<Property>>(
+    property || {
+      title: '',
+      price: 0,
+      location: '',
+      area: 0,
+      bedrooms: 0,
+      bathrooms: 0,
+      parking: 0,
+      type: 'Apartamento',
+      status: 'Ativo',
+      imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+      description: '',
+      amenities: []
+    }
+  );
+
+  useEffect(() => {
+    if (property) setFormData(property);
+    else setFormData({
+      title: '',
+      price: 0,
+      location: '',
+      area: 0,
+      bedrooms: 0,
+      bathrooms: 0,
+      parking: 0,
+      type: 'Apartamento',
+      status: 'Ativo',
+      imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+      description: '',
+      amenities: []
+    });
+  }, [property, isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white dark:bg-bg-dark w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-8 md:p-12 shadow-2xl space-y-8"
+      >
+        <div className="flex justify-between items-center">
+          <h2 className="text-3xl font-black dark:text-white tracking-tighter uppercase">{property ? 'Editar' : 'Novo'} <span className="text-primary">Imóvel</span></h2>
+          <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-surface-dark rounded-xl transition-colors dark:text-white">
+            <PlusCircle className="size-6 rotate-45" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Título</label>
+            <input 
+              value={formData.title}
+              onChange={e => setFormData({...formData, title: e.target.value})}
+              className="input-field" 
+              placeholder="Ex: Penthouse em Talatona" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Preço (AOA)</label>
+            <input 
+              type="number"
+              value={formData.price}
+              onChange={e => setFormData({...formData, price: Number(e.target.value)})}
+              className="input-field" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Localização</label>
+            <input 
+              value={formData.location}
+              onChange={e => setFormData({...formData, location: e.target.value})}
+              className="input-field" 
+              placeholder="Ex: Luanda, Talatona" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Tipo</label>
+            <select 
+              value={formData.type}
+              onChange={e => setFormData({...formData, type: e.target.value as any})}
+              className="input-field"
+            >
+              <option value="Apartamento">Apartamento</option>
+              <option value="Vivenda">Vivenda</option>
+              <option value="Penthouse">Penthouse</option>
+              <option value="Escritório">Escritório</option>
+            </select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Área (m²)</label>
+            <input 
+              type="number"
+              value={formData.area}
+              onChange={e => setFormData({...formData, area: Number(e.target.value)})}
+              className="input-field" 
+            />
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Quartos</label>
+              <input type="number" value={formData.bedrooms} onChange={e => setFormData({...formData, bedrooms: Number(e.target.value)})} className="input-field px-3" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">WC</label>
+              <input type="number" value={formData.bathrooms} onChange={e => setFormData({...formData, bathrooms: Number(e.target.value)})} className="input-field px-3" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Vagas</label>
+              <input type="number" value={formData.parking} onChange={e => setFormData({...formData, parking: Number(e.target.value)})} className="input-field px-3" />
+            </div>
+          </div>
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">URL da Imagem</label>
+            <input 
+              value={formData.imageUrl}
+              onChange={e => setFormData({...formData, imageUrl: e.target.value})}
+              className="input-field" 
+              placeholder="https://images.unsplash.com/..." 
+            />
+          </div>
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Descrição</label>
+            <textarea 
+              value={formData.description}
+              onChange={e => setFormData({...formData, description: e.target.value})}
+              className="input-field h-24 resize-none" 
+              placeholder="Descreva o imóvel..." 
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-4 pt-4">
+          <button onClick={onClose} className="flex-1 py-5 rounded-2xl font-black text-slate-500 bg-slate-100 dark:bg-surface-dark hover:bg-slate-200 transition-all">Cancelar</button>
+          <button onClick={() => onSave(formData)} className="flex-1 py-5 rounded-2xl font-black text-white bg-primary hover:bg-primary-hover transition-all shadow-xl shadow-primary/20">Salvar Imóvel</button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+const StatModal = ({ 
+  isOpen, 
+  onClose, 
+  onSave, 
+  stat 
+}: { 
+  isOpen: boolean, 
+  onClose: () => void, 
+  onSave: (s: Stat) => void, 
+  stat: Stat 
+}) => {
+  const [formData, setFormData] = useState<Stat>(stat);
+
+  useEffect(() => {
+    setFormData(stat);
+  }, [stat, isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white dark:bg-bg-dark w-full max-w-md rounded-[2.5rem] p-8 md:p-12 shadow-2xl space-y-8"
+      >
+        <div className="flex justify-between items-center">
+          <h2 className="text-3xl font-black dark:text-white tracking-tighter uppercase">Editar <span className="text-primary">Estatística</span></h2>
+          <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-surface-dark rounded-xl transition-colors dark:text-white">
+            <PlusCircle className="size-6 rotate-45" />
+          </button>
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Label</label>
+            <input 
+              value={formData.label}
+              onChange={e => setFormData({...formData, label: e.target.value})}
+              className="input-field" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Valor</label>
+            <input 
+              value={formData.value}
+              onChange={e => setFormData({...formData, value: e.target.value})}
+              className="input-field" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Mudança (%)</label>
+            <input 
+              value={formData.change}
+              onChange={e => setFormData({...formData, change: e.target.value})}
+              className="input-field" 
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-4 pt-4">
+          <button onClick={onClose} className="flex-1 py-5 rounded-2xl font-black text-slate-500 bg-slate-100 dark:bg-surface-dark hover:bg-slate-200 transition-all">Cancelar</button>
+          <button onClick={() => onSave(formData)} className="flex-1 py-5 rounded-2xl font-black text-white bg-primary hover:bg-primary-hover transition-all shadow-xl shadow-primary/20">Salvar</button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: { properties: Property[], stats: Stat[], activities: Activity[], onNavigate: (s: Screen) => void, onRefresh: () => void }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  
+  const [isStatModalOpen, setIsStatModalOpen] = useState(false);
+  const [editingStat, setEditingStat] = useState<Stat | null>(null);
+
   const deleteProperty = async (id: string) => {
     if (!confirm('Tem a certeza que deseja eliminar este imóvel?')) return;
     const { error } = await supabase.from('properties').delete().eq('id', id);
@@ -446,6 +676,81 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
     } else {
       onRefresh();
     }
+  };
+
+  const handleSaveProperty = async (data: Partial<Property>) => {
+    const payload = {
+      title: data.title,
+      price: data.price,
+      location: data.location,
+      area: data.area,
+      bedrooms: data.bedrooms,
+      bathrooms: data.bathrooms,
+      parking: data.parking,
+      type: data.type,
+      status: data.status,
+      image_url: data.imageUrl,
+      description: data.description || '',
+      amenities: data.amenities || []
+    };
+
+    let error;
+    if (editingProperty) {
+      const { error: err } = await supabase.from('properties').update(payload).eq('id', editingProperty.id);
+      error = err;
+    } else {
+      const { error: err } = await supabase.from('properties').insert([payload]);
+      error = err;
+    }
+
+    if (error) {
+      alert('Erro ao salvar: ' + error.message);
+    } else {
+      setIsModalOpen(false);
+      setEditingProperty(null);
+      onRefresh();
+    }
+  };
+
+  const handleUpdateStat = async (data: Stat) => {
+    const { error } = await supabase
+      .from('stats')
+      .update({
+        label: data.label,
+        value: data.value,
+        change: data.change
+      })
+      .eq('id', data.id);
+
+    if (error) {
+      alert('Erro ao atualizar estatística: ' + error.message);
+    } else {
+      setIsStatModalOpen(false);
+      onRefresh();
+    }
+  };
+
+  const deleteActivity = async (id: string) => {
+    const { error } = await supabase.from('activities').delete().eq('id', id);
+    if (error) alert('Erro ao eliminar log: ' + error.message);
+    else onRefresh();
+  };
+
+  const createActivity = async () => {
+    const title = prompt('Título da atividade:');
+    if (!title) return;
+    const subtitle = prompt('Subtítulo/Descrição:');
+    if (!subtitle) return;
+    
+    const { error } = await supabase.from('activities').insert([{
+      type: 'lead',
+      title,
+      subtitle,
+      time: 'AGORA'
+    }]);
+
+    if (error) alert('Erro ao criar log: ' + error.message);
+    else onRefresh();
   };
 
   return (
@@ -459,7 +764,10 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
           <h1 className="text-3xl md:text-5xl font-extrabold dark:text-white tracking-tighter uppercase leading-[0.85]">Painel <br /> <span className="text-primary">Administrativo</span></h1>
           <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">Gestão inteligente do seu portfólio imobiliário.</p>
         </div>
-        <button className="btn-primary flex items-center gap-3 px-10 py-6 text-lg">
+        <button 
+          onClick={() => { setEditingProperty(null); setIsModalOpen(true); }}
+          className="btn-primary flex items-center gap-3 px-10 py-6 text-lg"
+        >
           <PlusCircle className="size-6" /> Novo Imóvel
         </button>
       </div>
@@ -475,11 +783,17 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
             className="glass-card p-8 rounded-[2.5rem] space-y-6 group hover:border-primary/30 transition-all"
           >
             <div className="flex items-center justify-between">
-              <div className={`p-4 rounded-2xl ${stat.icon === 'home_work' ? 'bg-blue-500/10 text-blue-500' : stat.icon === 'groups' ? 'bg-emerald-500/10 text-emerald-500' : stat.icon === 'history' ? 'bg-amber-500/10 text-amber-500' : 'bg-primary/10 text-primary'} transition-transform group-hover:scale-110`}>
+              <div className={`p-4 rounded-2xl ${stat.icon === 'home_work' ? 'bg-blue-500/10 text-blue-500' : stat.icon === 'groups' ? 'bg-emerald-500/10 text-emerald-500' : stat.icon === 'history' ? 'bg-amber-500/10 text-amber-500' : 'bg-primary/10 text-primary'} transition-transform group-hover:scale-110 flex items-center gap-4`}>
                 {(() => {
                   const Icon = ICON_MAP[stat.icon] || HomeIcon;
                   return <Icon className="size-7" />;
                 })()}
+                <button 
+                  onClick={() => { setEditingStat(stat); setIsStatModalOpen(true); }}
+                  className="p-1.5 hover:bg-primary/20 rounded-md transition-colors"
+                >
+                  <Edit3 className="size-4" />
+                </button>
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-emerald-500 text-sm font-black flex items-center gap-1">
@@ -543,8 +857,14 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
           animate={{ opacity: 1, x: 0 }}
           className="glass-card rounded-[3rem] flex flex-col"
         >
-          <div className="p-8 md:p-10 border-b border-primary/10">
+          <div className="p-8 md:p-10 border-b border-primary/10 flex items-center justify-between">
             <h3 className="font-extrabold text-xl dark:text-white tracking-tight">Atividade Recente</h3>
+            <button 
+              onClick={createActivity}
+              className="p-2 bg-primary/10 text-primary rounded-xl hover:bg-primary hover:text-white transition-all"
+            >
+              <PlusCircle className="size-5" />
+            </button>
           </div>
           <div className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-h-[500px] scrollbar-hide">
             {activities.map((act) => (
@@ -553,7 +873,15 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
                   <Bell className="size-6" />
                 </div>
                 <div className="flex-1 min-w-0 space-y-1">
-                  <p className="text-sm font-black dark:text-white group-hover:text-primary transition-colors">{act.title}</p>
+                  <div className="flex justify-between items-start">
+                    <p className="text-sm font-black dark:text-white group-hover:text-primary transition-colors">{act.title}</p>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); deleteActivity(act.id); }}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-500 transition-all"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
                   <p className="text-xs text-slate-500 font-medium truncate">{act.subtitle}</p>
                   <p className="text-[10px] text-slate-400 mt-2 font-black uppercase tracking-widest">{act.time}</p>
                 </div>
@@ -626,7 +954,12 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
                   </div>
                   <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-100 dark:border-border-dark pt-8 gap-6">
                     <div className="flex gap-4">
-                      <button className="p-4 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all bg-slate-50 dark:bg-bg-dark shadow-sm"><Edit3 className="size-6" /></button>
+                      <button 
+                        onClick={() => { setEditingProperty(prop); setIsModalOpen(true); }}
+                        className="p-4 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all bg-slate-50 dark:bg-bg-dark shadow-sm"
+                      >
+                        <Edit3 className="size-6" />
+                      </button>
                       <button className="p-4 text-slate-500 hover:text-blue-500 hover:bg-blue-500/10 rounded-2xl transition-all bg-slate-50 dark:bg-bg-dark shadow-sm"><Megaphone className="size-6" /></button>
                       <button
                         onClick={() => deleteProperty(prop.id)}
@@ -648,6 +981,21 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
           </div>
         </div>
       </div>
+      <PropertyModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSave={handleSaveProperty}
+        property={editingProperty}
+      />
+
+      {editingStat && (
+        <StatModal 
+          isOpen={isStatModalOpen}
+          onClose={() => setIsStatModalOpen(false)}
+          onSave={handleUpdateStat}
+          stat={editingStat}
+        />
+      )}
     </motion.div>
   );
 };

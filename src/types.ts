@@ -16,6 +16,7 @@ export interface Property {
 }
 
 export interface Stat {
+  id: string;
   label: string;
   value: string;
   change?: string;
