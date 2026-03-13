@@ -11,6 +11,7 @@ export interface Property {
   status: 'Ativo' | 'Pendente' | 'Vendido';
   tag?: string;
   imageUrl: string;
+  images: string[];
   description: string;
   amenities: string[];
 }

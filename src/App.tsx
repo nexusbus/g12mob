@@ -295,7 +295,10 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
   </motion.div>
 );
 
-const DetailsScreen = ({ property, onBack }: { property: Property, onBack: () => void }) => (
+const DetailsScreen = ({ property, onBack }: { property: Property, onBack: () => void }) => {
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  return (
   <motion.div
     initial={{ opacity: 0, scale: 0.95 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -303,17 +306,52 @@ const DetailsScreen = ({ property, onBack }: { property: Property, onBack: () =>
     className="fixed inset-0 z-[60] bg-white dark:bg-bg-dark overflow-y-auto"
   >
     {/* Hero Section */}
-    <div className="relative h-[60vh] md:h-[80vh] overflow-hidden">
-      <motion.img
-        initial={{ scale: 1.2 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1.5 }}
-        src={property.imageUrl}
-        className="w-full h-full object-cover"
-        alt={property.title}
-        referrerPolicy="no-referrer"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+    <div className="relative h-[60vh] md:h-[80vh] overflow-hidden group">
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={activeImageIndex}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.8 }}
+          src={property.images[activeImageIndex] || property.imageUrl}
+          className="absolute inset-0 w-full h-full object-cover"
+          alt={property.title}
+          referrerPolicy="no-referrer"
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
+
+      {/* Navigation Controls */}
+      {property.images && property.images.length > 1 && (
+        <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button 
+            onClick={() => setActiveImageIndex((prev) => (prev === 0 ? property.images.length - 1 : prev - 1))}
+            className="p-4 bg-white/10 backdrop-blur-xl rounded-full text-white hover:bg-white/20 transition-all border border-white/20"
+          >
+            <ChevronRight className="size-6 rotate-180" />
+          </button>
+          <button 
+            onClick={() => setActiveImageIndex((prev) => (prev === property.images.length - 1 ? 0 : prev + 1))}
+            className="p-4 bg-white/10 backdrop-blur-xl rounded-full text-white hover:bg-white/20 transition-all border border-white/20"
+          >
+            <ChevronRight className="size-6" />
+          </button>
+        </div>
+      )}
+
+      {/* Thumbnails Indicator */}
+      {property.images && property.images.length > 1 && (
+        <div className="absolute bottom-40 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+          {property.images.map((_, i) => (
+            <button 
+              key={i} 
+              onClick={() => setActiveImageIndex(i)}
+              className={`h-1.5 rounded-full transition-all ${i === activeImageIndex ? 'w-8 bg-primary' : 'w-2 bg-white/40 hover:bg-white/60'}`}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="absolute top-8 left-8 z-10">
         <button
@@ -426,7 +464,8 @@ const DetailsScreen = ({ property, onBack }: { property: Property, onBack: () =>
       </aside>
     </div>
   </motion.div>
-);
+  );
+};
 
 const ICON_MAP: Record<string, any> = {
   home_work: HomeIcon,
@@ -461,12 +500,15 @@ const PropertyModal = ({
       status: 'Ativo',
       imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
       description: '',
-      amenities: []
+      amenities: [],
+      images: []
     }
   );
 
+  const [newImageUrl, setNewImageUrl] = useState('');
+
   useEffect(() => {
-    if (property) setFormData(property);
+    if (property) setFormData({...property, images: property.images || []});
     else setFormData({
       title: '',
       price: 0,
@@ -479,9 +521,26 @@ const PropertyModal = ({
       status: 'Ativo',
       imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
       description: '',
-      amenities: []
+      amenities: [],
+      images: []
     });
   }, [property, isOpen]);
+
+  const addImage = () => {
+    if (!newImageUrl) return;
+    setFormData({
+      ...formData, 
+      images: [...(formData.images || []), newImageUrl]
+    });
+    setNewImageUrl('');
+  };
+
+  const removeImage = (index: number) => {
+    setFormData({
+      ...formData, 
+      images: (formData.images || []).filter((_, i) => i !== index)
+    });
+  };
 
   if (!isOpen) return null;
 
@@ -563,13 +622,44 @@ const PropertyModal = ({
               <input type="number" value={formData.parking} onChange={e => setFormData({...formData, parking: Number(e.target.value)})} className="input-field px-3" />
             </div>
           </div>
+          <div className="md:col-span-2 space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Galeria de Imagens</label>
+            <div className="flex gap-2">
+              <input 
+                value={newImageUrl}
+                onChange={e => setNewImageUrl(e.target.value)}
+                className="input-field" 
+                placeholder="Cole o link da imagem aqui..." 
+              />
+              <button 
+                onClick={addImage}
+                className="px-6 py-2 bg-primary/10 text-primary rounded-2xl font-black text-xs hover:bg-primary hover:text-white transition-all"
+              >
+                Adicionar
+              </button>
+            </div>
+            <div className="grid grid-cols-4 gap-4 mt-4">
+              {(formData.images || []).map((url, i) => (
+                <div key={i} className="relative group aspect-video rounded-xl overflow-hidden border border-slate-200">
+                  <img src={url} className="w-full h-full object-cover" alt="" />
+                  <button 
+                    onClick={() => removeImage(i)}
+                    className="absolute inset-0 bg-red-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 className="size-5 text-white" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="md:col-span-2 space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">URL da Imagem</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Capa Principal (Fallback)</label>
             <input 
               value={formData.imageUrl}
               onChange={e => setFormData({...formData, imageUrl: e.target.value})}
               className="input-field" 
-              placeholder="https://images.unsplash.com/..." 
+              placeholder="Link para a imagem de capa..." 
             />
           </div>
           <div className="md:col-span-2 space-y-2">
@@ -690,6 +780,7 @@ const AdminScreen = ({ properties, stats, activities, onNavigate, onRefresh }: {
       type: data.type,
       status: data.status,
       image_url: data.imageUrl,
+      images: data.images || [],
       description: data.description || '',
       amenities: data.amenities || []
     };
@@ -1039,6 +1130,7 @@ export default function App() {
         status: p.status,
         tag: p.tag,
         imageUrl: p.image_url,
+        images: p.images || [],
         description: p.description,
         amenities: p.amenities
       }));
