@@ -156,7 +156,7 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
     className="pb-20"
   >
     {/* Hero */}
-    <header className="relative h-[600px] flex flex-col justify-end p-6 md:p-12 overflow-hidden">
+    <header className="relative h-[650px] md:h-[600px] flex flex-col justify-end p-6 pb-20 md:p-12 md:pb-16 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
@@ -164,7 +164,7 @@ const HomeScreen = ({ properties, stats, onPropertyClick, onNavigate }: { proper
           alt="Luxury House"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/60 to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-4xl space-y-6">
